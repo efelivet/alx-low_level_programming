@@ -5,7 +5,7 @@
  */
 int main(void)
 {
-	char c[] = "main.h";
+	char c[] = "main";
 	int i;
 
 	for (i = 0; i < 9; i++)
