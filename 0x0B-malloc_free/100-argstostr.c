@@ -1,51 +1,47 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "main.h"
 /**
- * **strtow - splits a string into words
- *
- * @str: string to split
- * Return: pointer to array of strings, or NULL if fail
+ * _realloc - reallocates old to new, set conditions from problem
+ * returning dest w/ size of malloc new_size, set src as ptr
+ * @ptr: pointer to memory prev alloc, must free end
+ * @old_size: input old
+ * @new_size: input new
+ * Return: 0
  */
-char **strtow(char *str)
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
-	char **a;
-	int i, k, n, word_count = 0, word_len = 0, current_word = 0;
+	char *dest, *src;
+	unsigned int i;
 
-	if (str == NULL || *str == '\0')
-		return (NULL);
-	for (i = 0; *(str + i) != '\0'; i++)
+	if (new_size == old_size)
+		return (ptr);
+
+	if (ptr == NULL)
 	{
-		if (*(str + i) != ' ')
-			word_count++;
-		while (*(str + i) != ' ' && *(str + i))
-			i++;
-		if (!*(str + i))
-			break;
-	}
-	if (word_count == 0)
-		return (NULL);
-	a = malloc(sizeof(char *) * (word_count + 1));
-	if (a == NULL)
-		return (NULL);
-	for (i = 0, k = i; current_word < word_count; i++, word_len = 0, k = i)
-	{
-		if (*(str + i) == ' ')
-			continue;
-		while (*(str + k) != ' ' && *(str + k++))
-			word_len++;
-		a[current_word] = malloc(sizeof(char) * word_len + 1);
-		if (!a[current_word])
+		ptr = malloc(new_size);
+		if (ptr == NULL)
 		{
-			while (current_word-- >= 0)
-				free(a[current_word]);
-			free(a);
 			return (NULL);
 		}
-		for (n = 0; i < k; i++, n++)
-			a[current_word][n] = *(str + i);
-		a[current_word++][n] = '\0';
+		return (ptr);
 	}
-	a[word_count] = NULL;
-	return (a);
+
+	if (new_size == 0 && ptr != NULL)
+	{
+		free(ptr);
+		return (NULL);
+	}
+
+	dest = malloc(new_size);
+	if (dest == NULL)
+		return (NULL);
+
+	src = ptr;
+
+	for (i = 0; i < new_size && i < old_size; i++)
+		dest[i] = src[i];
+	free(ptr);
+
+	return (dest);
 }
